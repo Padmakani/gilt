@@ -1,0 +1,105 @@
+
+
+(function (global, doc) {
+  var
+    options = {
+      _counterPrefix : 'gilt-magellan-module',
+      type           : 'magellan',
+      view           : 'linktext' || 'basic',
+      minify         : '' || 'true',
+      autoInit       : true,
+      container      : null,
+      store          : 'women' || '',
+      jsAssetsUri    : '//assets2.giltcdn.com/a/js/globalnav_swift/201205301926-2626c3aba3/',
+      cssAssetsUri   : '//assets2.giltcdn.com/a/css/globalnav_swift/201205301926-2626c3aba3/',
+      serviceUri     : '//www.gilt.com/' || '/',
+      urls           : {
+        women : '',men : '',children : '',home : '',city : '',taste : 'http://www.gilttaste.com/specials',jetsetter : '',parkandbond : ''
+      },
+      addQuery   : {
+        women : '',men : '',children : '',home : '',city : '',taste : '',jetsetter : 'oaff=ggn&plt=ggn',parkandbond : 'oglt=glbnav'
+      },
+      services   : {}
+    },
+    head = doc.getElementsByTagName('head')[0],
+    script = doc.createElement('script'),
+    moduleCss = doc.createElement('link'),
+    timer,
+    bootstrap;
+
+  moduleCss.type = 'text/css';
+  moduleCss.rel = 'stylesheet';
+  moduleCss.href = options.cssAssetsUri + 'globalnav_swift.min.css';
+  head.appendChild(moduleCss);
+
+  bootstrap = function () {
+    var
+      uniqueId,
+      sb;
+
+    options.services = {
+      underscore : GiltMagellan._,
+      dom        : GiltMagellan.bonzo,
+      query      : GiltMagellan.qwery,
+      ev         : GiltMagellan.bean,
+      anim       : GiltMagellan.morpheus,
+      template   : GiltMagellan.Template,
+      ajax       : function (obj) { // Adapter from jQuery to Reqwest API, for non-script, and shim for script because Reqwest doesn't seem to be handling them.
+        if (obj.dataType === 'script') {
+          var loaded = 0;
+          var ajaxScript = document.createElement('script');
+          ajaxScript.src = obj.url;
+          ajaxScript.type = 'text/javascript';
+
+          ajaxScript.onload = ajaxScript.onreadystatechange = function () {
+            if ((ajaxScript.readyState && ajaxScript.readyState !== 'complete' && ajaxScript.readyState !== 'loaded') || loaded) {
+              return false;
+            }
+            ajaxScript.onload = ajaxScript.onreadystatechange = null;
+            obj.success && obj.success();
+            head.removeChild(script);
+            loaded = 1;
+          };
+
+          document.getElementsByTagName('head')[0].appendChild(ajaxScript);
+
+        } else {
+          GiltMagellan.reqwest({
+            url : obj.url,
+            method : obj.type,
+            type : obj.dataType,
+            success : obj.success,
+            error : obj.error
+          });
+        }
+      }
+    };
+
+    options.container = GiltMagellan.qwery('.magellan')[0];
+
+    GiltMagellan.App.view.register('magellan', options.view, GiltMagellan.MagellanView[options.view]);
+    uniqueId = GiltMagellan.App.register('magellan', GiltMagellan.Magellan, options);
+
+    if (options.autoInit !== 'false') {
+      sb = GiltMagellan.App.start(uniqueId);
+    }
+
+    GiltMagellan.Notify.publish('module/loaded', ['magellan', uniqueId]);
+  };
+
+  script.src =  options.jsAssetsUri + 'package' + (options.minify === 'false' ? '.src' : '.min') + '.js';
+
+  head.appendChild(script);
+
+  timer = function () {
+    setTimeout(function () {
+      if (window.GiltMagellan.MagellanView && window.GiltMagellan.MagellanView[options.view]) {
+        bootstrap();
+      } else {
+        timer();
+      }
+    }, 300);
+  };
+  timer();
+
+}(window, document));
