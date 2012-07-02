@@ -808,8 +808,7 @@ lang="en">
     <div class="submit-area">
             <input class="add-to-cart primary-action button tint" value="Add to Cart" onclick="fireAddToCart('1013589492','cotton-cord');" type="submit">
             <a href="http://www.gilt.com/sale/women/personaloffers/product/123490843" class="add-to-wait-list primary-action button hidden">Add to Wait List</a>
-          </div>
-
+          </div>          
   
           <div class="delivery-override">
             <img class="delivery-override-image" src="Product3_files/icon.png">
@@ -1969,7 +1968,7 @@ neighborhood in 2009. </p>
                 var items = []; //declare array            
                 items.push([product.toString().replace(" ", "-").toLowerCase(), variant.toString().replace(" ", "-").toLowerCase()])
                 hiddenDiv = document.getElementById('myAddToCartDiv');
-                hiddenDiv.innerText = items;
+                hiddenDiv.innerHTML = items;
                 hiddenDiv.dispatchEvent(customEvent);
             }            
         </script>
