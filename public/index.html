@@ -806,7 +806,7 @@ lang="en">
     </form>
 
     <div class="submit-area">
-            <input class="add-to-cart primary-action button tint" value="Add to Cart" onclick="fireAddToCart('1013589504','cotton-cord');" type="submit">
+            <input class="add-to-cart primary-action button tint" value="Add to Cart" onclick="fireAddToCart('cotton-cord',[{'option_value':{'option_type_name':'tshirt-color', 'option_type_value':'Red'}}, {'option_value':{'option_type_name':'tshirt-size', 'option_type_value':'Small'}}]);" type="submit">
             <a href="http://www.gilt.com/sale/women/personaloffers/product/123490843" class="add-to-wait-list primary-action button hidden">Add to Wait List</a>
           </div>          
   
@@ -1960,17 +1960,22 @@ neighborhood in 2009. </p>
             var customEvent = document.createEvent('Event');
             customEvent.initEvent('fire1CartEvent', true, true);
 
-            function fireAddToCart(variant, product) {
-                fire1CartEvent(variant, product);
+            function fireAddToCart(product, variantoptions) {
+                //variantfilter = "tshirt-color:Red;tshirt-size:Small";            
+                fire1CartEvent(product, variantoptions);
             }
 
-            function fire1CartEvent(variant, product) {
-                var items = []; //declare array            
-                items.push([product.toString().replace(" ", "-").toLowerCase(), variant.toString().replace(" ", "-").toLowerCase()])
+            function fire1CartEvent(product, variantoptions) {
+                var items = null; //declare array
+                if (variantoptions == undefined) {
+                    variantoptions = [];
+                }
+                var optionValue = JSON.stringify(variantoptions);
+                items = product.toString().replace(" ", "-").toLowerCase() + ";" + optionValue;
                 hiddenDiv = document.getElementById('myAddToCartDiv');
-                hiddenDiv.innerHTML = items;
+                hiddenDiv.setAttribute("data-options", items);
                 hiddenDiv.dispatchEvent(customEvent);
-            }            
+            }
         </script>
     </div>
     <div id="myAddToCartDiv" style="display: none;">
