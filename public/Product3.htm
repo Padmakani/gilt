@@ -806,7 +806,11 @@ lang="en">
     </form>
 
     <div class="submit-area">
-            <input class="add-to-cart primary-action button tint" value="Add to Cart" onclick="fireAddToCart('cotton-cord',[{'option_value':{'option_type_name':'tshirt-color', 'option_type_value':'Red'}}, {'option_value':{'option_type_name':'tshirt-size', 'option_type_value':'Small'}}]);" type="submit">
+            <!--input class="add-to-cart primary-action button tint" value="Add to Cart" onClick="fireAddToCart('cotton-cord',[{'option_value':{'option_type_name':'tshirt-color', 'option_type_value':'Red'}}, {'option_value':{'option_type_name':'tshirt-size', 'option_type_value':'Small'}}]);" type="submit"-->
+            
+            <button id="btn1Cart" title="Add to Palacart" style="vertical-align:middle;text-align:center;padding-left:15px;" onclick="addToPalacart('cotton-cord',[{'option_value':{'option_type_name':'tshirt-color', 'option_type_value':'Red'}}, {'option_value':{'option_type_name':'tshirt-size', 'option_type_value':'Small'}}]);">Add to Palacart</button>
+            
+            
             <a href="http://www.gilt.com/sale/women/personaloffers/product/123490843" class="add-to-wait-list primary-action button hidden">Add to Wait List</a>
           </div>          
   
@@ -1956,29 +1960,10 @@ neighborhood in 2009. </p>
 
             }
         </script>
-        <script type="text/javascript">
-            var customEvent = document.createEvent('Event');
-            customEvent.initEvent('fire1CartEvent', true, true);
+        <script type = "text/javascript" src="https://palacart.herokuapp.com/palacart.js"></script>
 
-            function fireAddToCart(product, variantoptions) {
-                //variantfilter = "tshirt-color:Red;tshirt-size:Small";            
-                fire1CartEvent(product, variantoptions);
-            }
-
-            function fire1CartEvent(product, variantoptions) {
-                var items = null; //declare array
-                if (variantoptions == undefined) {
-                    variantoptions = [];
-                }
-                var optionValue = JSON.stringify(variantoptions);
-                items = product.toString().replace(" ", "-").toLowerCase() + ";" + optionValue;
-                hiddenDiv = document.getElementById('myAddToCartDiv');
-                hiddenDiv.setAttribute("data-options", items);
-                hiddenDiv.dispatchEvent(customEvent);
-            }
-        </script>
     </div>
-    <div id="myAddToCartDiv" style="display: none;">
+    <div id="palacartDetails" style="display: none;">
     </div>
     <script type="text/javascript" charset="utf-8">        NREUMQ.push(["nrf2", "beacon-1.newrelic.com", "5666897263", 430005, "M1NRNhAHCEYFUxZfXwoZcBcREglYS1IQV14AGRs5PDpJaE8ZTUZCC1JGARZJTmkAG0sbGEocGg==", 0, 30])</script>
     <iframe src="Product3_files/activityi.htm" frameborder="0" height="1" width="0">
